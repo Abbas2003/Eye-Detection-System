@@ -1,0 +1,27 @@
+# Eye Detection System Requirements
+# Install using: pip install -r requirements.txt
+
+# Core ML libraries
+tensorflow>=2.10.0
+keras>=2.10.0
+numpy>=1.21.0
+scikit-learn>=1.1.0
+
+# Computer Vision
+opencv-python>=4.6.0
+
+# Data visualization
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# General utilities
+Pillow>=9.0.0
+tqdm>=4.64.0
+
+# Optional: For better performance
+# tensorflow-gpu>=2.10.0  # Uncomment if you have GPU support
+
+# Development and testing (optional)
+# jupyter>=1.0.0
+# ipython>=8.0.0
+# pytest>=7.0.0
