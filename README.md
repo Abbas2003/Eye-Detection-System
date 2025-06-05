@@ -67,7 +67,7 @@ config = {
     'batch_size': 32,
     'epochs': 15,
     'learning_rate': 0.001,
-    'model_save_path': 'my_eye_model.h5'
+    'model_save_path': 'models/my_eye_model.h5'
 }
 
 # Initialize trainer

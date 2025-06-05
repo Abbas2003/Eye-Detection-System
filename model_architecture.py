@@ -1,6 +1,6 @@
 # model_architecture.py
 from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization, Input
 from keras.optimizers import Adam
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 import keras
@@ -33,8 +33,11 @@ class EyeDetectionModel:
             Sequential: Compiled Keras model
         """
         model = Sequential([
+            # Input layer
+            Input(shape=self.input_shape),
+            
             # First Convolutional Block
-            Conv2D(32, (3, 3), activation='relu', input_shape=self.input_shape),
+            Conv2D(32, (3, 3), activation='relu'),
             BatchNormalization(),
             MaxPooling2D((2, 2)),
             
@@ -67,7 +70,7 @@ class EyeDetectionModel:
         self.model = model
         return model
     
-    def get_callbacks(self, model_save_path: str = 'best_eye_model.h5'):
+    def get_callbacks(self, model_save_path: str = 'models/best_eye_model.h5'):
         """
         Get training callbacks for better training performance.
         

@@ -27,8 +27,8 @@ class EyeDetectionTrainer:
             'learning_rate': 0.001,
             'dropout_rate': 0.3,
             'validation_split': 0.2,
-            'model_save_path': 'best_eye_model.h5',
-            'data_save_dir': 'processed_data'
+            'model_save_path': 'final_eye_model.keras',
+            'data_save_dir': 'Data/processed',
         }
         
         # Update with provided config
@@ -174,7 +174,7 @@ class EyeDetectionTrainer:
             print(f"Test Accuracy: {test_accuracy:.4f}")
         
         # Save final model
-        final_model_path = os.path.join(self.config['data_save_dir'], 'final_eye_model.h5')
+        final_model_path = os.path.join(self.config['data_save_dir'], 'final_eye_model.keras')
         self.model.save_model(final_model_path)
         
         # Plot training history
@@ -247,8 +247,8 @@ def main():
         'learning_rate': 0.001,
         'dropout_rate': 0.3,
         'validation_split': 0.2,
-        'model_save_path': 'best_eye_model.h5',
-        'data_save_dir': 'processed_data'
+        'model_save_path': 'best_eye_model.keras',
+        'data_save_dir': 'Data/processed',
     }
     
     # Initialize trainer

@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 from typing import Union, Tuple
 import keras
+import winsound  # Only for Windows
 
 class EyePredictor:
     """
@@ -134,49 +135,50 @@ class EyePredictor:
         """
         if self.model is None:
             raise ValueError("Model not loaded. Call load_model() first.")
-        
+
         cap = cv2.VideoCapture(0)
-        
         if not cap.isOpened():
             raise Exception("Could not open webcam")
-        
+
         print(f"Starting webcam prediction for {duration} seconds...")
         print("Press 'q' to quit early")
-        
+
         start_time = cv2.getTickCount()
-        
+
         while True:
             ret, frame = cap.read()
             if not ret:
                 break
-            
-            # Convert to grayscale for display
+
+            # Convert to grayscale and resize for model
             gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            
+            resized = cv2.resize(gray_frame, (self.img_size, self.img_size))
+            norm = resized.astype('float32') / 255.0
+            input_img = np.expand_dims(norm, axis=(0, -1))  # (1, img_size, img_size, 1)
+
             try:
-                # Make prediction
-                label, confidence = self.predict_single_image(gray_frame, threshold)
-                
-                # Display result on frame
+                prediction = self.model.predict(input_img, verbose=0)[0][0]
+                label = "Open" if prediction > threshold else "Closed"
+                confidence = float(prediction)
+                # Play buzzer if eyes are closed
+                if label == "Closed":
+                    winsound.Beep(1000, 200)
                 color = (0, 255, 0) if label == "Open" else (0, 0, 255)
-                cv2.putText(frame, f"Eye: {label} ({confidence:.2f})", 
-                           (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
-                
+                cv2.putText(frame, f"Eye: {label} ({confidence:.2f})",
+                            (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
             except Exception as e:
-                cv2.putText(frame, f"Error: {str(e)}", 
-                           (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            
+                cv2.putText(frame, f"Error: {str(e)}",
+                            (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+
             cv2.imshow('Eye State Detection', frame)
-            
-            # Check for exit conditions
+
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
-            
-            # Check duration
+
             elapsed_time = (cv2.getTickCount() - start_time) / cv2.getTickFrequency()
             if elapsed_time >= duration:
                 break
-        
+
         cap.release()
         cv2.destroyAllWindows()
         print("Webcam prediction ended")

@@ -26,8 +26,8 @@ def example_1_full_training_pipeline():
         'learning_rate': 0.001,
         'dropout_rate': 0.3,
         'validation_split': 0.2,
-        'model_save_path': 'models/eye_detection_model.h5',
-        'data_save_dir': 'data/processed'
+        'model_save_path': 'Data/processed/final_eye_model.keras',
+        'data_save_dir': 'Data/processed'
     }
     
     # Initialize trainer
@@ -51,7 +51,7 @@ def example_1_full_training_pipeline():
         
         # Step 3: Test model
         print("\nStep 3: Testing model...")
-        trainer.test_model(test_image_path='Data/Dataset/test_closed/141.jpg')  # Your test image
+        trainer.test_model(test_image_path='Data/Dataset/Open_Eyes/s0001_02334_0_0_1_0_0_01.png')  # Your test image (Open eyes)
         print("✓ Model testing completed")
         
     except Exception as e:
@@ -146,11 +146,11 @@ def example_4_prediction_only():
     
     try:
         # Initialize predictor
-        predictor = EyePredictor('eye_model.h5', img_size=50)
+        predictor = EyePredictor('Data/processed/final_eye_model.keras', img_size=50)
         
         # Single image prediction
         print("Single image prediction:")
-        image_path = 'Data/Dataset/test_closed/141.jpg'  # Closed eye test image
+        image_path = 'Data/Dataset/Open_Eyes/s0001_02336_0_0_1_0_0_01.png'  # Open eye test image
         if os.path.exists(image_path):
             label, confidence = predictor.predict_single_image(image_path)
             print(f"Image: {image_path}")
